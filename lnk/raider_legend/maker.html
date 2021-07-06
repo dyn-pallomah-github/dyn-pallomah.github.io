@@ -1,0 +1,253 @@
+<!doctype html>
+<html>
+	<title>Raider Legend Maker</title>
+	<link rel='icon' href='texture/rl.icon.png'>
+	<body style='margin: 0; background: black'>
+		<noscript style='font: 18px Consolas, monospace; color: white'>Please turn on JavaScript!</noscript>
+
+		<div style='display: none'>
+			<!-- textures --->
+			<img id='font'                src='texture/rl.font.png'>
+			<img id='entityAttributeIcon' src='texture/rl.entityAttributeIcon.png'>
+
+			<img id='player'     src='texture/rl.player.png'>
+			<img id='escape'     src='texture/rl.escape.png'>
+			<img id='coin'       src='texture/rl.coin.png'>
+			<img id='star'       src='texture/rl.star.png'>
+			<img id='wall'       src='texture/rl.wall.png'>
+			<img id='spike'      src='texture/rl.spike.png'>
+			<img id='bladeTrap'  src='texture/rl.bladeTrap.png'>
+			<img id='blaster'    src='texture/rl.blaster.png'>
+			<img id='bouncePad'  src='texture/rl.bouncePad.png'>
+			<img id='wormhole'   src='texture/rl.wormhole.png'>
+			<img id='bat'        src='texture/rl.bat.png'>
+			<img id='barrier'    src='texture/rl.barrier.png'>
+			<img id='glass'      src='texture/rl.glass.png'>
+			<img id='gate'       src='texture/rl.gate.png'>
+			<img id='wheel'      src='texture/rl.wheel.png'>
+			<img id='flip'       src='texture/rl.flip.png'>
+			<img id='elevator'   src='texture/rl.elevator.png'>
+			<img id='dragon'     src='texture/rl.dragon.png'>
+			<img id='dragonTrap' src='texture/rl.dragonTrap.png'>
+		</div>
+
+		<!-- canvas (29* 17 blocks) --->
+		<canvas id='cvs' width='972' height='612' style='background: black; display: none'></canvas>
+		<script>document.getElementById('cvs').style.display= 'inline'</script>
+
+		<!-- initialize & stages --->
+		<script src='main/main/initialize.js'></script>
+		<script src='main/main/level.js'></script>
+
+		<!-- main --->
+		<script>
+			var meta= {
+				update: ()=> {
+					stage= [];
+					for(var i= 0; i< meta.height; i++) {
+						stage.push([]);
+						for(var j= 0; j< meta.width; j++)
+							stage[i].push(0);
+					}
+				},
+				width: 120,
+				height: 120,
+				cx: Math.floor(120/ 2- 29/ 2),
+				cy: Math.floor(120/ 2- 17/ 2),
+				m: -1,
+				mx: 0,
+				my: 0,
+				blk: 5,
+				id: {
+					wormhole: '0',
+				},
+
+				// load a stage that is stored in [main/main/level.js] or in string format
+				load: map=> {
+					meta.update();
+					if(!isNaN(map)) map= level[map];
+					map= map.split('\n');
+					map.forEach((v, x)=> map[x]= v.split(','));
+					var w= map[0].length,
+							h= map.length;
+					for(var i= 0; i< map.length; i++)
+						stage[Math.floor(meta.height/ 2- h/ 2)+ i].splice(Math.floor(meta.width/ 2- w/ 2), map[0].length, ...map[i]);
+					meta.cx= Math.floor(meta.width/ 2- w/ 2);
+					meta.cy= Math.floor(meta.height/ 2- h/ 2);
+				},
+				// output
+				out: ()=> {
+					var l= [],
+							s= [...stage],
+							min= [],
+							max= [];
+					for(var i= 0; i< s.length; i++)
+						for(var j= 0; j< s[i].length; j++) {
+							if(s[i][j]!== 0) break;
+							if(j=== s[i].length- 1) {
+								s.splice(i, 1);
+								i--;
+								break;
+							}
+						}
+					for(var i= 0; i< s.length; i++)
+						for(var j= 0; j< s[i].length; j++)
+							if(s[i][j]!== 0) {
+								min.push(j);
+								break;
+							}
+					min= Math.min(...min);
+					for(var i= 0; i< s.length; i++)
+						for(var j= s[i].length- 1; j>= 0; j--)
+							if(s[i][j]!== 0) {
+								max.push(j+ 1);
+								break;
+							}
+					max= Math.max(...max);
+					s.forEach((v, x)=> s[x]= v.slice(min, max));
+					for(var i= 0; i< s.length; i++)
+						for(var j= 0; j< s[i].length- 1; j++)
+							s[i][j]+= ',';
+					s.forEach((v, x)=> s[x]= v.join(''));
+					s= s.join('\n');
+
+					console.log(`\
+// lv 
+level.push(\`\\
+${s}\`);`);
+				},
+
+				rdr: {
+					get: (name, x, y)=> {
+						var data= [...meta.rdr[name]];
+						[data[2], data[3]]= [x+ data[2], y+ data[3]];
+						return data;
+					},
+
+					// [rdrN, rdrC, rdrX, rdrY, rdrW, rdrH, rdrD, rdrFx, rdrFy, attr]
+					// ['name', 0, 0, 0, 12, 12, 0, 1, 1, ?attr]
+					'': [''],
+					player: ['player', 0, 0, 0, 14, 14, 0, 1, 1],
+					escape: ['escape', 0, 0, 0, 12, 12, 0, 1, 1],
+					coin: ['coin', 0, 2, 2, 8, 8, 0, 1, 1],
+					star: ['star', 0, 0, 0, 12, 12, 0, 1, 1],
+					wall: ['wall', 4* 12, 0, 0, 12, 12, 0, 1, 1],
+					spike: ['spike', 4* 12, 0, 0, 12, 12, 0, 1, 1],
+					bladeTrap: ['bladeTrap', 4* 12, 0, 0, 12, 12, 0, 1, 1],
+					blasterU: ['blaster', 0, 0, 0, 12, 12, 0, 1, 1],
+					blasterR: ['blaster', 0, 0, 0, 12, 12, 1, 1, -1],
+					blasterD: ['blaster', 0, 0, 0, 12, 12, 2, -1, 1],
+					blasterL: ['blaster', 0, 0, 0, 12, 12, 3, 1, 1],
+					bouncePadL: ['bouncePad', 0, 0, 0, 12, 12, 1, 1, 1],
+					bouncePadR: ['bouncePad', 0, 0, 0, 12, 12, 0, 1, 1],
+					wormhole: ['wormhole', 0, 0, 0, 12, 12, 0, 1, 1, '0'],
+					batU: ['bat', 1, 0, 0, 12, 12, 0, 1, 1, 'up'],
+					batR: ['bat', 1, 0, 0, 12, 12, 0, 1, 1, 'right'],
+					batD: ['bat', 1, 0, 0, 12, 12, 0, 1, 1, 'down'],
+					batL: ['bat', 1, 0, 0, 12, 12, 0, 1, 1, 'left'],
+					barrierU: ['barrier', 0, 0, 0, 12, 12, 0, 1, 1],
+					barrierR: ['barrier', 0, 0, 0, 12, 12, 1, 1, 1],
+					barrierD: ['barrier', 0, 0, 0, 12, 12, 2, 1, 1],
+					barrierL: ['barrier', 0, 0, 0, 12, 12, 3, 1, 1],
+					glass: ['glass', 0, 0, 0, 12, 12, 0, 1, 1],
+					gate: ['gate', 0, 0, 0, 12, 12, 0, 1, 1],
+					wheel: ['wheel', 0, -1, -1, 14, 14, 0, 1, 1],
+					flip: ['flip', 8* 12, 0, 0, 12, 12, 0, 1, 1],
+					elevatorU: ['elevator', 3* 12, 0, 0, 12, 12, 0, 1, 1, 'up'],
+					elevatorR: ['elevator', 3* 12, 0, 0, 12, 12, 0, 1, 1, 'right'],
+					elevatorD: ['elevator', 3* 12, 0, 0, 12, 12, 0, 1, 1, 'down'],
+					elevatorL: ['elevator', 3* 12, 0, 0, 12, 12, 0, 1, 1, 'left'],
+					dragonU: ['dragonTrap', 4* 12, 0, 0, 12, 12, 0, 1, 1, 'up'],
+					dragonR: ['dragonTrap', 4* 12, 0, 0, 12, 12, 0, 1, 1, 'right'],
+					dragonD: ['dragonTrap', 4* 12, 0, 0, 12, 12, 0, 1, 1, 'down'],
+					dragonL: ['dragonTrap', 4* 12, 0, 0, 12, 12, 0, 1, 1, 'left'],
+				},
+			}
+			var stage= [];
+			meta.update();
+
+			// input
+			window.addEventListener('mousemove', e=> {
+				[meta.mx, meta.my]= [Math.floor((e.clientX- c.screen.x)/ 3/ 12), Math.floor((e.clientY- c.screen.y)/ 3/ 12)];
+				if(meta.m=== 0) stage[meta.my+ meta.cy][meta.mx+ meta.cx]= meta.blk;
+				if(meta.m=== 2) stage[meta.my+ meta.cy][meta.mx+ meta.cx]= 0;
+			});
+			c.cvs.addEventListener('mousedown', e=> {
+				meta.m= e.button;
+				if(meta.m=== 0) stage[meta.my+ meta.cy][meta.mx+ meta.cx]= meta.blk;
+				if(meta.m=== 2) stage[meta.my+ meta.cy][meta.mx+ meta.cx]= 0;
+				localStorage['rl.lastMap']= [...stage];
+			});
+			window.addEventListener('mouseup', e=> meta.m= -1);
+			window.addEventListener('wheel', e=> {
+				if(e.deltaY< 0) meta.blk++;
+				else meta.blk--;
+				if(meta.blk>= c.list.length) meta.blk= 1;
+				if(meta.blk<= 0) meta.blk= c.list.length- 1;
+			});
+			window.addEventListener('keydown', e=> {
+				var k= e.key;
+				if(k=== 'ArrowUp') meta.cy--;
+				if(k=== 'ArrowDown') meta.cy++;
+				if(k=== 'ArrowLeft') meta.cx--;
+				if(k=== 'ArrowRight') meta.cx++;
+				if(k=== 'Delete') meta.update();
+				if(c.list[meta.blk]=== 'wormhole') {
+					if(!isNaN(k)) {
+						meta.id.wormhole+= k;
+						meta.id.wormhole= parseInt(meta.id.wormhole).toString();
+						meta.rdr.wormhole[9]= meta.id.wormhole;
+					}
+					if(k=== 'Backspace') {
+						meta.id.wormhole= meta.id.wormhole.slice(0, meta.id.wormhole.length- 1);
+						if(!meta.id.wormhole) meta.id.wormhole= '0';
+						meta.rdr.wormhole[9]= meta.id.wormhole;
+					}
+				}
+			});
+
+			// rendering
+			setInterval(()=> {
+				c.ctx.clearRect(0, 0, c.cvs.width, c.cvs.height);
+				c.ctx.globalAlpha= 1;
+				c.ctx.fillStyle= '#400000';
+				for(var i= 0; i< 17; i++) {
+					for(var j= 0; j< 29; j++) {
+						if(i+ meta.cy< 0 || j+ meta.cx< 0 ||
+							 i+ meta.cy>= meta.height || j+ meta.cx>= meta.width)
+							c.ctx.fillRect(j* 12* 3, i* 12* 3, 12* 3, 12* 3);
+						else {
+							var data= meta.rdr.get(c.list[stage[i+ meta.cy][j+ meta.cx]], j* 12, i* 12),
+									attr= data[9],
+									x= data[2],
+									y= data[3];
+							c.rdr(...data.slice(0, 9));
+							if(attr) {
+								c.ctx.save();
+								c.ctx.globalAlpha= 0.8;
+								if(attr=== 'up') c.rdr('entityAttributeIcon', 8* 10, x+ 2, y+ 2, 8, 8);
+								if(attr=== 'right') c.rdr('entityAttributeIcon', 8* 10, x+ 2, y+ 2, 8, 8, 1);
+								if(attr=== 'down') c.rdr('entityAttributeIcon', 8* 10, x+ 2, y+ 2, 8, 8, 2);
+								if(attr=== 'left') c.rdr('entityAttributeIcon', 8* 10, x+ 2, y+ 2, 8, 8, 3);
+								if(typeof parseInt(attr)=== 'number')
+									for(var a= 0; a< attr.length; a++)
+										c.rdr('entityAttributeIcon', 8* parseInt(attr[a]), x+ 2+ a* 8- Math.max(0, attr.length- 1)* 4, y+ 2, 8, 8);
+
+								c.ctx.restore();
+							}
+						}
+					}
+				}
+				c.ctx.globalAlpha= 0.4;
+				c.rdr(...meta.rdr.get(c.list[meta.blk], meta.mx* 12, meta.my* 12).slice(0, 9));
+				c.ctx.globalAlpha= 1;
+				c.write(c.list[meta.blk], c.cvs.width/ 2/ 3- c.list[meta.blk].length/ 2* 7, 4);
+				if(c.list[meta.blk]=== 'wormhole')
+					c.write(meta.id.wormhole, c.cvs.width/ 2/ 3+ c.list[meta.blk].length/ 2* 7+ 6, 4);
+
+				c.clockCycle++;
+				if(!(c.clockCycle% 10)) c.frame++;
+			}, 1000/ 120);
+		</script>
+	</body>
+</html>

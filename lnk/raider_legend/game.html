@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+	<title>Raider Legend (v34)</title>
+	<link rel='icon' href='texture/rl.icon.png'>
+	<body style='margin: 0; background: black'>
+		<noscript style='font: 18px Consolas, monospace; color: white'>Please turn on JavaScript!</noscript>
+
+		<div style='display: none'>
+			<!-- textures --->
+			<img id='font'         src='texture/rl.font.png'>
+			<img id='fontBlack'    src='texture/rl.fontBlack.png'>
+			<img id='gameLogo'     src='texture/rl.gameLogo.png'>
+
+			<img id='levelButton'  src='texture/rl.levelButton.png'>
+			<img id='levelLink'    src='texture/rl.levelLink.png'>
+			<img id='levelTheme'   src='texture/rl.levelTheme.png'>
+			<img id='coinLogo'     src='texture/rl.coinLogo.png'>
+			<img id='dashLine'     src='texture/rl.dashLine.png'>
+			<img id='actionButton' src='texture/rl.actionButton.png'>
+			<img id='actionFigure' src='texture/rl.actionFigure.png'>
+			<img id='end'          src='texture/rl.end.png'>
+
+			<img id='player'       src='texture/rl.player.png'>
+			<img id='playerTrail'  src='texture/rl.playerTrail.png'>
+			<img id='particle'     src='texture/rl.particle.png'>
+			<img id='spark'        src='texture/rl.spark.png'>
+			<img id='explosion'    src='texture/rl.explosion.png'>
+			<img id='dust'         src='texture/rl.dust.png'>
+			<img id='enemyTrail'   src='texture/rl.enemyTrail.png'>
+			<img id='playerFinish' src='texture/rl.playerFinish.png'>
+			<img id='playerDeath'  src='texture/rl.playerDeath.png'>
+			<img id='escape'       src='texture/rl.escape.png'>
+			<img id='coin'         src='texture/rl.coin.png'>
+			<img id='coinVanish'   src='texture/rl.coinVanish.png'>
+			<img id='star'         src='texture/rl.star.png'>
+			<img id='wall'         src='texture/rl.wall.png'>
+			<img id='spike'        src='texture/rl.spike.png'>
+			<img id='bladeTrap'    src='texture/rl.bladeTrap.png'>
+			<img id='blaster'      src='texture/rl.blaster.png'>
+			<img id='blast'        src='texture/rl.blast.png'>
+			<img id='bouncePad'    src='texture/rl.bouncePad.png'>
+			<img id='wormhole'     src='texture/rl.wormhole.png'>
+			<img id='bat'          src='texture/rl.bat.png'>
+			<img id='barrier'      src='texture/rl.barrier.png'>
+			<img id='glass'        src='texture/rl.glass.png'>
+			<img id='gate'         src='texture/rl.gate.png'>
+			<img id='wheel'        src='texture/rl.wheel.png'>
+			<img id='flip'         src='texture/rl.flip.png'>
+			<img id='elevator'     src='texture/rl.elevator.png'>
+			<img id='dragonTrap'   src='texture/rl.dragonTrap.png'>
+			<img id='dragon'       src='texture/rl.dragon.png'>
+			<img id='electroBall'  src='texture/rl.electroBall.png'>
+		</div>
+
+		<!-- canvas (29* 17 blocks) --->
+		<canvas id='cvs' width='972' height='612' style='background: black; display: none'></canvas>
+		<script>document.getElementById('cvs').style.display= 'inline'</script>
+
+		<!-- main/ structure --->
+		<script src='main/main/initialize.js'></script>
+		<script src='main/main/generate.js'></script>
+		<script src='main/main/input.js'></script>
+		<script src='main/main/sound.js'></script>
+		<script src='main/main/level.js'></script>
+		
+		<!-- entities --->
+		<script src='main/entity/levelButton.js'></script>
+		<script src='main/entity/player.js'></script>
+		<script src='main/entity/playerTrail.js'></script>
+		<script src='main/entity/overlay.js'></script>
+		<script src='main/entity/particle.js'></script>
+		<script src='main/entity/spark.js'></script>
+		<script src='main/entity/explosion.js'></script>
+		<script src='main/entity/dust.js'></script>
+		<script src='main/entity/dustParticle.js'></script>
+		<script src='main/entity/enemyTrail.js'></script>
+		<script src='main/entity/escape.js'></script>
+		<script src='main/entity/coin.js'></script>
+		<script src='main/entity/star.js'></script>
+		<script src='main/entity/wall.js'></script>
+		<script src='main/entity/spike.js'></script>
+		<script src='main/entity/bladeTrap.js'></script>
+		<script src='main/entity/blade.js'></script>
+		<script src='main/entity/blaster.js'></script>
+		<script src='main/entity/blast.js'></script>
+		<script src='main/entity/dart.js'></script>
+		<script src='main/entity/bouncePad.js'></script>
+		<script src='main/entity/wormhole.js'></script>
+		<script src='main/entity/bat.js'></script>
+		<script src='main/entity/barrier.js'></script>
+		<script src='main/entity/glass.js'></script>
+		<script src='main/entity/gate.js'></script>
+		<script src='main/entity/wheel.js'></script>
+		<script src='main/entity/flip.js'></script>
+		<script src='main/entity/elevator.js'></script>
+		<script src='main/entity/dragonTrap.js'></script>
+		<script src='main/entity/dragon.js'></script>
+		<script src='main/entity/electroBall.js'></script>
+	</body>
+</html>
