@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+	<style>
+		body {
+			background: #000000;
+			margin: 0;
+		}
+		img {
+			display: none;
+		}
+		canvas {
+			background: #40ff40;
+			cursor: crosshair;
+		}
+	</style>
+	<body>
+		<img id='font'    src='/textures/font.png' />
+		<img id='missing' src='/textures/missing.png' />
+
+		<img id='player'     src='/textures/player.png' />
+		<img id='exit'       src='/textures/exit.png' />
+		<img id='flag'       src='/textures/flag.png' />
+		<img id='soil'       src='/textures/soil.png' />
+		<img id='spike'      src='/textures/spike.png' />
+		<img id='mouse'      src='/textures/mouse.png' />
+		<img id='log'        src='/textures/log.png' />
+		<img id='vine'       src='/textures/vine.png' />
+		<img id='slime'      src='/textures/slime.png' />
+		<img id='soil_slope' src='/textures/soil_slope.png' />
+
+		<canvas id='board' width='992' height='608'></canvas>
+		<script src='/js/world/episode1.js'></script>
+		<script>
+			window.addEventListener('contextmenu', function() {
+				event.preventDefault();
+			});
+			var c= {
+				cvs: document.getElementById('board'),
+				ctx: document.getElementById('board').getContext('2d'),
+				rdr: function(img, cx, x, y) {
+					if(img)
+						c.ctx.drawImage((document.getElementById(img)?? document.getElementById('missing')),
+							cx* 16, 0, 16, 16, Math.round(x* 2), Math.round(y* 2), 32, 32);
+				},
+				clr: function() {
+					c.ctx.clearRect(0, 0, this.cvs.width, this.cvs.height);
+				},
+				map: [],
+				list: [
+					'', 0,
+					'player', 0,
+					'exit', 0,
+					'flag', 0,
+					'soil', 0,
+					'mouse', 0,
+					'spike', 0,
+					'log', 0,
+					'vine', 0,
+					'slime', 0,
+					'soil_slope', 0,
+					'soil_slope', 1,
+					'soil_slope', 2,
+					'soil_slope', 3,
+				],
+				px: 0,
+				py: 0,
+				cx: 0,
+				cy: 0,
+				i: '4',
+				b: 4,
+				mk: -1,
+
+				load: function(src) {
+					if(Number.isInteger(parseInt(src))) var src= world[src];
+					if(src!== undefined) {
+						c.map= [];
+						var l= 1;
+						for(var i= 0; i< src.length; i++)
+							if(src[i]=== '\n') l++;
+						for(var i= 0; i< l; i++)
+							c.map[i]= [];
+
+						var i= 0;
+						var j= 0;
+						for(var a= 0; a< src.length; a++) {
+							if(src[a]=== '\n') {
+								i++;
+								j= 0;
+								continue;
+							}
+							c.map[i][j]= src[a].charCodeAt(0)- 33;
+							j++;
+						}
+					}
+				},
+				encode: function() {
+					var max= 0;
+					var r= [[]];
+					for(var i= 0; i< c.map.length; i++)
+						if(c.map[i].length> max) max= c.map[i].length;
+					for(var i= 0; i< c.map.length; i++) {
+						if(!c.map[i]) c.map[i]= [];
+						r[i]= [];
+						for(var j= 0; j< max; j++)
+							r[i][j]= 0;
+						for(var j= 0; j< c.map[i].length; j++)
+							if(c.map[i][j]) r[i][j]= c.map[i][j];
+					}
+
+					for(var i= 0; i< r.length; i++) {
+						var x= 0;
+						for(var j= 0; j< r[i].length; j++)
+							if(r[i][j]=== 0) x++;
+						if(x=== r[i].length) {
+							r.splice(i, 1);
+							i--;
+						}
+					}
+					var min= r[0].length;
+					for(var i= 0; i< r.length; i++) {
+						for(var j= 0; j< r[i].length; j++) {
+							if(r[i][j]!== 0) {
+								if(j< min) min= j+ 0;
+								break;
+							}
+						}
+					}
+					var max= 0;
+					for(var i= 0; i< r.length; i++) {
+						for(var j= r[i].length- 1; j>= 0; j--) {
+							if(r[i][j]!== 0) {
+								if(j+ 1> max) max= j+ 1;
+								break;
+							}
+						}
+					}
+					for(var i= 0; i< r.length; i++)
+						r[i]= r[i].slice(min, max);
+
+					var r1= '';
+					for(var i= 0; i< r.length; i++) {
+						for(var j= 0; j< r[i].length; j++)
+							r1+= String.fromCharCode(r[i][j]+ 33);
+						r1+= '\n';
+					}
+					console.log(r1.trim());
+				},
+			}
+			c.ctx.imageSmoothingEnabled= false;
+
+			window.addEventListener('load', function() {
+				setInterval(function() {
+					c.clr();
+
+					if(c.mk=== 0 && c.px+ c.cx>= 0 && c.py+ c.cy>= 0) {
+						if(!c.map[c.py+ c.cy]) c.map[c.py+ c.cy]= [];
+						if(c.b< c.list.length) c.map[c.py+ c.cy][c.px+ c.cx]= c.b;
+					}
+					if(c.mk=== 2) {
+						if(!c.map[c.py+ c.cy]) c.map[c.py+ c.cy]= [];
+						c.map[c.py+ c.cy][c.px+ c.cx]= 0;
+					}
+					for(var i= c.cy; i< c.cy+ 19; i++) {
+						if(!c.map[i]) c.map[i]= [];
+						for(var j= c.cx; j< c.cx+ 31; j++) {
+							if(i< 0 || j< 0) {
+								c.ctx.fillStyle= '#ff4040';
+								c.ctx.fillRect((j- c.cx)* 32, (i- c.cy)* 32, 32, 32);
+								continue;
+							}
+							if(i=== 0 || j=== 0) {
+								c.ctx.fillStyle= '#ffff40';
+								c.ctx.fillRect((j- c.cx)* 32, (i- c.cy)* 32, 32, 32);
+							}
+							c.rdr(c.list[c.map[i][j]* 2], c.list[c.map[i][j]* 2+ 1], (j- c.cx)* 16, (i- c.cy)* 16);
+						}
+					}
+					c.ctx.globalAlpha= 0.6;
+					c.rdr(c.list[c.b* 2], c.list[c.b* 2+ 1], c.px* 16, c.py* 16);
+					c.ctx.globalAlpha= 1;
+
+					var t= c.i.toString();
+					var w= `abcdefghijklmnopqrstuvwxyz0123456789 \`~!@#$%^&*()-_=+[]{}\\|;:'",<.>/?`;
+					for(var i= 0; i< t.length; i++)
+						c.ctx.drawImage(document.getElementById('font'), w.indexOf(t[i])* 9+ 9, 0, 9, 9, i* 18+ 2, 2, 18, 18);
+				}, 1000/ 200);
+			});
+			window.addEventListener('keydown', function() {
+				if(!/F\d/.test(event.key)) event.preventDefault();
+				if(!/\D/.test(event.key)) c.i+= event.key;
+				if(event.key=== ' ') c.i= '';
+				if(event.key=== 'Backspace') c.i= c.i.substr(0, c.i.length- 1);
+
+				if(c.i> 0 && parseInt(c.i)< c.list.length) c.b= parseInt(c.i);
+
+				if(event.key=== 'ArrowUp') c.cy--;
+				if(event.key=== 'ArrowDown') c.cy++;
+				if(event.key=== 'ArrowLeft') c.cx--;
+				if(event.key=== 'ArrowRight') c.cx++;
+				if(event.key=== 'Delete') c.load('');
+				if(event.key=== 'Escape') c.encode();
+				if(event.key=== 'Enter') c.load(c.i);
+			});
+			window.addEventListener('mousemove', function() {
+				c.px= Math.floor(event.clientX/ 32);
+				c.py= Math.floor(event.clientY/ 32);
+				if(c.px>= 31) c.px= 30;
+				if(c.py>= 19) c.py= 18;
+			});
+			window.addEventListener('mousedown', function() {
+				c.mk= event.button;
+			});
+			window.addEventListener('mouseup', function() {
+				c.mk= -1;
+			});
+			c.cvs.addEventListener('wheel', function() {
+				event.preventDefault();
+				if(event.deltaY< 0) c.b++;
+				else c.b--;
+				if(c.b* 2>= c.list.length) c.b= 1;
+				if(c.b<= 0) c.b= c.list.length/ 2- 1;
+				c.i= c.b.toString();
+			});
+		</script>
+	</body>
+</html>

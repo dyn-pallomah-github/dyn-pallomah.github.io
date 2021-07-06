@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Skyland Adventure</title>
+		<link rel='icon' href='textures/icon.png' />
+
+		<style>
+			* {
+				background: black;
+				margin: 0;
+			}
+			img {
+				display: none;
+				image-rendering: pixelated;
+			}
+		</style>
+	</head>
+	<body>
+		<img id='font'         src='textures/font.png' />
+		<img id='missing'      src='textures/missing.png' />
+		<img id='logo'         src='textures/logo.png' />
+		<img id='cursor'       src='textures/cursor.png' />
+		<img id='button.guide' src='textures/button.guide.png' />
+		<img id='pause.text'   src='textures/pause.text.png' />
+
+		<img id='player'       src='textures/player.png' />
+		<img id='player.death' src='textures/player.death.png' />
+		<img id='exit'         src='textures/exit.png' />
+		<img id='flag'         src='textures/flag.png' />
+		<img id='cloud'        src='textures/cloud.png' />
+		<img id='moss'         src='textures/moss.png' />
+		<img id='sprout'       src='textures/sprout.png' />
+		<img id='soil'         src='textures/soil.png' />
+		<img id='spike'        src='textures/spike.png' />
+		<img id='mouse'        src='textures/mouse.png' />
+		<img id='log'          src='textures/log.png' />
+		<img id='vine'         src='textures/vine.png' />
+		<img id='slime'        src='textures/slime.png' />
+		<img id='soil_slope'   src='textures/soil_slope.png' />
+
+		<noscript>
+			<img src='textures/enable.js.png' width='486' height='18' style='
+				display: block;' />
+		</noscript>
+		<canvas id='game' width='864' height='608' style='
+			cursor: none;'></canvas>
+
+		<script src='js/extension.it.js'></script>
+		<script src='js/main/setting.js'></script>
+		<script src='js/main/list.js'></script>
+		<script src='js/main/generate.js'></script>
+		<script src='js/main/process.js'></script>
+		<script src='js/main/input.js'></script>
+		<script src='js/main/word.js'></script>
+
+		<script src='js/world/episode1.js'></script>
+
+		<script src='js/player/player.js'></script>
+		<script src='js/player/player.death.js'></script>
+		<script src='js/player/player.exit.js'></script>
+		<script src='js/player/player.flag.js'></script>
+		<script src='js/player/player.soil.js'></script>
+		<script src='js/player/player.spike.js'></script>
+		<script src='js/player/player.log.js'></script>
+		<script src='js/player/player.vine.js'></script>
+		<script src='js/player/player.slime.js'></script>
+		<script src='js/player/player.slope.js'></script>
+		<script src='js/entity/cloud.js'></script>
+		<script src='js/entity/moss.js'></script>
+		<script src='js/entity/sprout.js'></script>
+		<script src='js/entity/mouse.js'></script>
+		<script src='js/block/exit.js'></script>
+		<script src='js/block/flag.js'></script>
+		<script src='js/block/soil.js'></script>
+		<script src='js/block/spike.js'></script>
+		<script src='js/block/log.js'></script>
+		<script src='js/block/vine.js'></script>
+		<script src='js/block/slime.js'></script>
+		<script src='js/block/soil_slope.js'></script>
+		<script src='js/block/slope_unit.js'></script>
+	</body>
+</html>
