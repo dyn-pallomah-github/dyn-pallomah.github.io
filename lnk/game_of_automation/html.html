@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Game of Automation</title>
+    <link rel='icon' href='icon.png' />
+    <style>
+      * {
+        margin: 0;
+        background: black;
+        position: fixed;
+        cursor: default;
+        
+        font-family: Consolas, monospace;
+        color: white;
+      }
+      *::selection {
+        background: none;
+      }
+      img, canvas {
+        display: none;
+      }
+      pre {
+        background: none;
+        display: block;
+        font-size: 16px;
+        
+        top: 72px;
+        left: 612px;
+      }
+      noscript {
+        font-size: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <img id='font'          src='textures/interface/font.png' />
+    <img id='grid'          src='textures/interface/grid.png' />
+    <img id='space'         src='textures/interface/space.png' />
+    <img id='border'        src='textures/interface/border.png' />
+    <img id='border_darken' src='textures/interface/border_darken.png' />
+    
+    <img id='blank'                   src='textures/cells/blank.png' />
+    <img id='mover_cell'              src='textures/cells/mover_cell.png' />
+    <img id='target_cell'             src='textures/cells/target_cell.png' />
+    <img id='rotator_cell'            src='textures/cells/rotator_cell.png' />
+    <img id='push_cell'               src='textures/cells/push_cell.png' />
+    <img id='directed_target_cell'    src='textures/cells/directed_target_cell.png' />
+    <img id='immobile_cell'           src='textures/cells/immobile_cell.png' />
+    <img id='conditional_mover_cell'  src='textures/cells/conditional_mover_cell.png' />
+    <img id='slide_cell'              src='textures/cells/slide_cell.png' />
+    <img id='repeater_cell'           src='textures/cells/repeater_cell.png' />
+    <img id='transmitter_cell'        src='textures/cells/transmitter_cell.png' />
+    <img id='receiver_cell'           src='textures/cells/receiver_cell.png' />
+    <img id='eraser_cell'             src='textures/cells/eraser_cell.png' />
+    <img id='directed_eraser_cell'    src='textures/cells/directed_eraser_cell.png' />
+    <img id='pusher_cell'             src='textures/cells/pusher_cell.png' />
+    <img id='custom_cell'             src='textures/cells/custom_cell.png' />
+    
+    <noscript>Enable JavaScript!</noscript>
+    <canvas id='canvas' width='576' height='540'></canvas>
+    
+    <script>
+      var version= '0.14.2';
+    </script>
+    <script src='scripts/maps/initialize.js'></script>
+    <script src='scripts/maps/maps.js'></script>
+    <script src='scripts/initialize.js'></script>
+    <script src='scripts/graphics.js'></script>
+    <script src='scripts/debug.js'></script>
+    
+    <script src='scripts/behaviour/move.js'></script>
+    <script src='scripts/behaviour/test.js'></script>
+    <script src='scripts/behaviour/rotate.js'></script>
+    <script src='scripts/behaviour/repeat.js'></script>
+    <script src='scripts/behaviour/transmit.js'></script>
+    <script src='scripts/behaviour/erase.js'></script>
+    <script src='scripts/behaviour/push.js'></script>
+    
+    <script src='scripts/cycle.js'></script>
+    <script src='scripts/keyboard.js'></script>
+    <pre id='debug'></pre>
+  </body>
+</html>
