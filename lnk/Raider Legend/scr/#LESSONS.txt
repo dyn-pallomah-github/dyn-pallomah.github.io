@@ -1,0 +1,46 @@
+Basics
+Barbwire
+Blade Trap
+Lock & Key
+Regeneration
+Bat
+Spike
+Bounce Pad
+Warper
+Lion Blaster
+Chameleon Block
+Ice Block
+Pufferfish
+Hornet
+Bubble
+Jelly
+Barrier
+One-Way Wall
+Magma Block
+Poison
+Semi-Solid Wall & Whirl Block
+Switch & Switch Block
+Elevator
+Lift
+Track
+Gate
+Wheel
+Piranha
+Conveyor Belt
+Goo
+Tiger Burner
+Slime
+Bear Trap
+Slide Block
+Explosive
+Dragon
+Koi
+Flip Block
+Blocker & Breakable Blocker
+Eyeball
+Spinner
+Note Block
+Plasma Ball
+Net
+Board
+[Bad Idea] Phantom (can pass through walls, doesnt follow the grid)
